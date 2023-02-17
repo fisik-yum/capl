@@ -23,6 +23,10 @@ Drop all `.chnm` files into `data/`. These files will be copies over to the buil
 
 Each frame is a single line of constant length, no escape sequences and indents. The first line of each file is a descriptor arranged in `<width> <height> <fps>`
 
+## Tooling
+
+A collection of sample scripts exist for converting video files to the `.chnm` or `.capl` file formats.
+
 ## Troubleshooting
 
 If passed a nonexistent file or invalid parameters, the program will not display anything, and after quitting your cursor will remain hidden. To fix this, start up a new terminal session, or run `capl` with valid parameters  

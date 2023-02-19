@@ -166,7 +166,7 @@ func (p *Player) Play(exitchan chan<- struct{}) {
 		fc := 0
 		for {
 			f := <-p.framechan
-			time.Sleep(time.Duration(uint(time.Second) / uint(p.fps+1)))
+			time.Sleep(time.Duration(uint(time.Second) / uint(p.fps)))
 			if f.N < fc {
 				continue
 			} else {

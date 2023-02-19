@@ -1,0 +1,8 @@
+build/
+data/starwars.capl
+data/badapple.capl
+tools/frames/
+tools/*/build/
+tools/*/data/
+tools/*/*.mp4
+

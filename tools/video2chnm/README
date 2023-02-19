@@ -1,0 +1,16 @@
+capl-tooling
+A Video to .capl / .chnm converter
+
+
+
+This program aids on conversion of a mp4 file to the format used by capl. The scripts have been tested on linux. NO compiled executables will be distributed.
+
+How to Use
+
+Configuration is achieved editing lines 30 and 34 of main.go for file info, and lines 3 and 5 of do.sh to point to the correct video file and downscale resolution.
+Note: It is recommended to stick with final dimensions that compose of 4096 characters or less, for compatibility reasons.
+
+Run do.sh
+go run main.go
+
+Scripts written by fisik_yum . Licensed under GPL version 3

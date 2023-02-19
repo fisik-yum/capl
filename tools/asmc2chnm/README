@@ -1,0 +1,13 @@
+capl-tooling
+A "asciimation.co.nz"-style file to chnm converter
+
+
+
+This program aids in conversion of asciimation movies in the format specified at asciimation.co.nz . The scripts have been tested on linux. NO compiled executables will be provided.
+
+How to Use
+
+Drop files in a directory named data/
+Run build.sh <filename> <width> <height>
+
+Scripts written by fisik_yum . Licensed under GPL version 3

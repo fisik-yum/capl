@@ -4,7 +4,7 @@ WIP Implementation of the `.chnm` file format. This program is descended from a 
 
 ## Current State
 
-This program plays Bad Apple @ 73x54 at around 78.5% (4:20 vs 3:40). More optimization is needed.
+This program plays Bad Apple @ 29.15 FPS, versus 30 FPS source mp4, which is faster than the code in the master branch. The goal is to get this to work at near full speed.
 
 ## Building and Testing
 
@@ -13,7 +13,7 @@ This program plays Bad Apple @ 73x54 at around 78.5% (4:20 vs 3:40). More optimi
 options for `file`  
 `loadscreen.chnm`
 
-Press the Escape Key to Quit, and Enter to Pause.
+Unfortunately, keyboard controls have been removed and will be reimplemented in future commits.
 
 ## Adding new animations
 
@@ -25,7 +25,7 @@ Each frame is a single line of constant length, no escape sequences and indents.
 
 ## Tooling
 
-A collection of sample scripts exist for converting video files to the `.chnm` or `.capl` file formats.
+A collection of sample scripts exist for converting video files to the `.capl` file format.
 
 ## Troubleshooting
 

@@ -15,30 +15,133 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package main
 
 import (
-	"capl/charplayer"
+	"bufio"
 	"flag"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/stoicperlman/fls"
 )
 
 var file string
+var ffile *fls.File
+
+var width int
+var fps float64
+
+type Frame struct {
+	data []string
+	N    int
+	err  error
+}
 
 func init() {
 	flag.StringVar(&file, "f", "", ".CHNM file to read")
-
+	flag.Parse()
+	f, err := os.Open(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	ffile = fls.LineFile(f)
+	width, _, fps = dataOf(ffile)
 }
 
 func main() {
-	echan := make(chan struct{})
-	//debug.SetGCPercent()
-	//debug.SetMemoryLimit(100000000000)
-	flag.Parse()
-	scr := charplayer.NewPlayer(file)
-	scr.Init()
+	fl, _ := os.Create("timing.log")
+	fmt.Fprintln(fl, "Buffered Channels")
 	//scr.Close()
-	go scr.Play(echan)
-	//scr.DrawFrame(900)
-	//fmt.Println(scr.Frame.Data)
-	//scr.Close()
-	<-echan
-	scr.Close()
+	fchan := make(chan Frame, 10000)
+	start := time.Now()
+	go func() {
+		i := 0
+		for {
+			select {
+			case fchan <- GetFrame(int64(i)):
+				i++
+				/*default:
+				continue*/
+			}
 
+		}
+	}()
+	for {
+		//a := <-fchan
+
+		select {
+		case a := <-fchan:
+			if a.err != nil {
+				fmt.Println(time.Since(start))
+				os.Exit(0)
+			}
+			DrawFrame(a.data)
+			/*default:
+			continue*/
+		}
+		time.Sleep(time.Duration(uint(time.Second) / uint(fps)))
+
+	}
+}
+
+func tochunks(s string, w int) []string {
+	var chunks []string = make([]string, 0, (len(s)-1)/w+1)
+	currentLen := 0
+	currentStart := 0
+	for i := range s {
+		if currentLen == w {
+			chunks = append(chunks, s[currentStart:i])
+			currentLen = 0
+			currentStart = i
+		}
+		currentLen++
+	}
+	chunks = append(chunks, s[currentStart:])
+	return chunks
+}
+
+func GetFrame(n int64) Frame {
+	pos, _ := ffile.SeekLine(n, io.SeekStart)
+	//defer p.wg.Done()
+	ffile.Seek(pos, io.SeekStart)
+	reader := bufio.NewReader(ffile.File)
+	line, _, err := reader.ReadLine()
+	return Frame{
+		data: tochunks(string(line), width),
+		N:    int(n),
+		err:  err,
+	}
+}
+
+func DrawFrame(f []string) {
+	os.Stdout.WriteString("\033[2J\033[H")
+	for _, x := range f {
+		os.Stdout.WriteString(x + "\n")
+	}
+}
+
+func dataOf(f *fls.File) (int, int, float64) {
+	pos, _ := f.SeekLine(0, io.SeekStart)
+	f.Seek(pos, io.SeekStart)
+	reader := bufio.NewReader(f)
+	line, _, err := reader.ReadLine()
+	if err != nil {
+		log.Fatal(err)
+	}
+	tentative := strings.Split(string(line), " ")
+	if len(tentative) < 3 {
+		log.Fatal("Invalid metadata descriptor")
+	}
+	keys := [3]int{}
+
+	for a := 0; a < 3; a++ {
+		keys[a], err = strconv.Atoi(tentative[a])
+		if err != nil {
+			log.Fatal("Invalid file descriptor")
+		}
+	}
+	return keys[0], keys[1], float64(keys[2])
 }

@@ -5,4 +5,4 @@ tools/frames/
 tools/*/build/
 tools/*/data/
 tools/*/*.mp4
-
+*.log

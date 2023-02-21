@@ -1,2 +1,6 @@
+github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203 h1:XBBHcIb256gUJtLmY22n99HaZTz+r2Z51xUPi01m3wg=
+github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203/go.mod h1:E1jcSv8FaEny+OP/5k9UxZVw9YFWGj7eI4KR/iOBqCg=
 github.com/stoicperlman/fls v0.0.0-20171222144224-f073b7a01081 h1:vEf6LukDDCcMnRXnIMy5XRo/MR4+3lNTAhXxM+x0ZXI=
 github.com/stoicperlman/fls v0.0.0-20171222144224-f073b7a01081/go.mod h1:mXF6uSYLo1a2BZPcVHpP8RstMYoQnCaFF+dmIY726NY=
+golang.org/x/sys v0.5.0 h1:MUK/U/4lj1t1oPg0HfuXDN/Z1wv31ZJ/YcPiGccS4DU=
+golang.org/x/sys v0.5.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

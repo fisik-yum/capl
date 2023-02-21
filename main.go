@@ -25,6 +25,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/eiannone/keyboard"
 	"github.com/stoicperlman/fls"
 )
 
@@ -49,13 +50,19 @@ func init() {
 	}
 	ffile = fls.LineFile(f)
 	width, _, fps = dataOf(ffile)
+	//os.Stdout.WriteString("\033[2J\033[H")
 }
 
 func main() {
-	fl, _ := os.Create("timing.log")
-	fmt.Fprintln(fl, "Buffered Channels")
-	//scr.Close()
-	fchan := make(chan Frame, 10000)
+
+	if err := keyboard.Open(); err != nil {
+		panic(err)
+	}
+	defer func() {
+		_ = keyboard.Close()
+	}()
+
+	fchan := make(chan Frame, 1024)
 	start := time.Now()
 	go func() {
 		i := 0
@@ -69,8 +76,20 @@ func main() {
 
 		}
 	}()
+	go func() {
+		for {
+			_, key, err := keyboard.GetKey()
+			if err != nil {
+				panic(err)
+			}
+			if key == keyboard.KeyEsc {
+				keyboard.Close()
+				os.Exit(1)
+			}
+		}
+	}()
+
 	for {
-		//a := <-fchan
 
 		select {
 		case a := <-fchan:
@@ -79,8 +98,6 @@ func main() {
 				os.Exit(0)
 			}
 			DrawFrame(a.data)
-			/*default:
-			continue*/
 		}
 		time.Sleep(time.Duration(uint(time.Second) / uint(fps)))
 

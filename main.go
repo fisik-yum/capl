@@ -50,11 +50,10 @@ func init() {
 	}
 	ffile = fls.LineFile(f)
 	width, _, fps = dataOf(ffile)
-	//os.Stdout.WriteString("\033[2J\033[H")
 }
 
 func main() {
-
+	ti := time.NewTicker(time.Duration(uint(time.Second) / uint(fps)))
 	if err := keyboard.Open(); err != nil {
 		panic(err)
 	}
@@ -70,8 +69,6 @@ func main() {
 			select {
 			case fchan <- GetFrame(int64(i)):
 				i++
-				/*default:
-				continue*/
 			}
 
 		}
@@ -84,6 +81,7 @@ func main() {
 			}
 			if key == keyboard.KeyEsc {
 				keyboard.Close()
+				ti.Stop()
 				os.Exit(1)
 			}
 		}
@@ -95,12 +93,12 @@ func main() {
 		case a := <-fchan:
 			if a.err != nil {
 				fmt.Println(time.Since(start))
+				ti.Stop()
 				os.Exit(0)
 			}
 			DrawFrame(a.data)
 		}
-		time.Sleep(time.Duration(uint(time.Second) / uint(fps)))
-
+		<-ti.C
 	}
 }
 

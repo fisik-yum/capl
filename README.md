@@ -4,7 +4,7 @@ WIP Implementation of the `.chnm` file format. This program is descended from a 
 
 ## Current State
 
-This program plays Bad Apple @ 29.15 FPS, versus 30 FPS source mp4. The goal is to get this to work at near full speed.
+This program plays Bad Apple (72x54) at full speed.
 
 ## Building and Testing
 

@@ -25,7 +25,7 @@ Each frame is a single line of constant length, no escape sequences and indents.
 
 ## Tooling
 
-A collection of sample scripts exist for converting video files to the `.capl` file format.
+See [https://github.com/fisik-yum/capl/tree/master/tools](tools)
 
 ## Troubleshooting
 

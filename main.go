@@ -31,7 +31,6 @@ import (
 
 var file string
 var ffile *fls.File
-
 var width int
 var fps float64
 
@@ -62,6 +61,8 @@ func main() {
 	}()
 
 	fchan := make(chan Frame, 1024)
+	pchan := make(chan struct{})
+	pstate := true
 	start := time.Now()
 	go func() {
 		i := 0
@@ -83,12 +84,21 @@ func main() {
 				keyboard.Close()
 				ti.Stop()
 				os.Exit(1)
+			} else if key == keyboard.KeyEnter {
+				if pstate == false {
+					pstate = !pstate
+					pchan <- struct{}{}
+				} else {
+					pstate = false
+				}
 			}
 		}
 	}()
 
 	for {
-
+		if pstate == false {
+			<-pchan
+		}
 		select {
 		case a := <-fchan:
 			if a.err != nil {
@@ -120,7 +130,6 @@ func tochunks(s string, w int) []string {
 
 func GetFrame(n int64) Frame {
 	pos, _ := ffile.SeekLine(n, io.SeekStart)
-	//defer p.wg.Done()
 	ffile.Seek(pos, io.SeekStart)
 	reader := bufio.NewReader(ffile.File)
 	line, _, err := reader.ReadLine()

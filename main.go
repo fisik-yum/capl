@@ -60,7 +60,7 @@ func main() {
 		_ = keyboard.Close()
 	}()
 
-	fchan := make(chan Frame, 1024)
+	fchan := make(chan Frame, 1)
 	pchan := make(chan struct{})
 	pstate := true
 	start := time.Now()
@@ -103,10 +103,12 @@ func main() {
 		case a := <-fchan:
 			if a.err != nil {
 				fmt.Println(time.Since(start))
-				ti.Stop()
+				keyboard.Close()
+                ti.Stop()
 				os.Exit(0)
 			}
 			DrawFrame(a.data)
+            fmt.Println(a.N)
 		}
 		<-ti.C
 	}
@@ -141,7 +143,7 @@ func GetFrame(n int64) Frame {
 }
 
 func DrawFrame(f []string) {
-	os.Stdout.WriteString("\033[2J\033[H")
+	os.Stdout.WriteString("\033[H\033[2J")
 	for _, x := range f {
 		os.Stdout.WriteString(x + "\n")
 	}
